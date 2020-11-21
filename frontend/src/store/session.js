@@ -1,3 +1,4 @@
+import { set } from 'js-cookie';
 import { fetch }  from './csrf'
 
 
@@ -17,6 +18,26 @@ const removeUser = () => {
     type: REMOVE_USER,
   }
 }
+
+export const restoreUser = () => async dispatch => {
+  const res = await fetch('/api/session');
+  dispatch(setUser(res.data.user));
+  return res;
+}
+
+export const signup = (user) => async (dispatch) => {
+  const { username, email, password } =user;
+  const res = await fetch('/api/users', {
+    method: 'POST',
+    body: JSON.stringify({
+      username,
+      email,
+      password,
+    }),
+  })
+  dispatch(setUser(res.data.user));
+  return res;
+};
 
 export const login = (user) => async (dispatch) => {
   const { credential, password } = user;
