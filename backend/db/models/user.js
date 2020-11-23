@@ -38,11 +38,30 @@ module.exports = (sequelize, DataTypes) => {
       return await User.scope('currentUser').findByPk(user.id);
     };
     static associate(models) {
-      // define association here
+      const columnMapping = {
+        through: 'UsersTransaction',
+        otherKey: 'userId',
+        foreignKey: 'transactionId'
+      }
+      User.belongsToMany(models.Transaction, columnMapping)
     }
   };
   User.init(
     {
+      fisrtName:{
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          len: [2, 50]
+        }
+      },
+      lastName:{
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          len: [2, 50]
+        }
+      },
       username: {
         type: DataTypes.STRING,
         allowNull: false,
