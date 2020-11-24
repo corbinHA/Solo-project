@@ -4,6 +4,8 @@ import { Route, Switch } from "react-router-dom";
 import SignupFormPage from "./components/SignupFormPage";
 import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
+import { ModalProvider }  from "./context/Modal"
+import TransactionForm from './components/TransactionForm'
 
 function App() {
   const dispatch = useDispatch();
@@ -14,14 +16,19 @@ function App() {
 
   return (
     <>
-      <Navigation isLoaded={isLoaded} />
-      {isLoaded && (
-        <Switch>
-          <Route path="/signup">
-            <SignupFormPage />
-          </Route>
-        </Switch>
-      )}
+      <ModalProvider>
+        <Navigation isLoaded={isLoaded} />
+        {isLoaded && (
+          <>
+            <Switch>
+              <Route path="/signup">
+                <SignupFormPage />
+              </Route>
+            </Switch>
+            <TransactionForm />
+          </>
+        )}
+      </ModalProvider>
     </>
   );
 }

@@ -6,6 +6,7 @@ import { fetch }  from './csrf'
 const SET_USER = 'session/setUser'
 const REMOVE_USER = 'session/removeUser'
 
+
 const setUser = (user) => {
   return {
     type: SET_USER,
@@ -18,6 +19,8 @@ const removeUser = () => {
     type: REMOVE_USER,
   }
 }
+
+
 
 export const logout = () => async dispatch => {
   const res = await fetch('/api/session', {
@@ -34,10 +37,13 @@ export const restoreUser = () => async dispatch => {
 }
 
 export const signup = (user) => async (dispatch) => {
-  const { username, email, password } =user;
+  const { firstName, lastName, username, email, password }= user;
+  console.log(firstName, lastName)
   const res = await fetch('/api/users', {
     method: 'POST',
     body: JSON.stringify({
+      firstName,
+      lastName,
       username,
       email,
       password,
@@ -59,6 +65,8 @@ export const login = (user) => async (dispatch) => {
   dispatch(setUser(response.data.user));
   return response;
 };
+
+
 
 const initialState = { user: null };
 
