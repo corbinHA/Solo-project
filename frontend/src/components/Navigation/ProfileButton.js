@@ -1,11 +1,37 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as sessionActions from '../../store/session';
+import styled from 'styled-components';
+
+const Button = styled.button`
+  display: inline-block;
+   padding: 0.35em 1.2em;
+   border: 0.1em solid #ffffff;
+   margin: 0 0.3em 0.3em 0;
+  background-color: black;
+   border-radius: 0.12em;
+   box-sizing: border-box;
+   text-decoration: none;
+   font-family: 'Roboto', sans-serif;
+   font-weight: 300;
+   color: #ffffff;
+   text-align: center;
+   transition: all 0.2s;
+    display: block;
+    margin: 0.4em;
+  &:hover {
+    color: #000000;
+     background-color: grey;
+  }
+`;
+
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
+  const sessionUser = useSelector((state) => state.session.user);
+  console.log(sessionUser)
   const [showMenu, setShowMenu] = useState(false);
-
+console.log(user.balance)
   const openMenu = () => {
     if (showMenu) return;
     setShowMenu(true);
@@ -30,15 +56,16 @@ function ProfileButton({ user }) {
 
   return (
     <>
-      <button onClick={openMenu}>
+      <Button onClick={openMenu}>
         <i className="fas fa-user-circle" />
-      </button>
+      </Button>
       {showMenu && (
         <ul className="profile-dropdown">
           <li>{user.username}</li>
           <li>{user.email}</li>
+          <li>`$ ${user.balance}`</li>
           <li>
-            <button onClick={logout}>Log Out</button>
+            <Button onClick={logout}>Log Out</Button>
           </li>
         </ul>
       )}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory} from 'react-router-dom';
 import * as transactionActions from '../../store/transactionReducer';
 
 function TransactionForm() {
@@ -10,13 +10,14 @@ function TransactionForm() {
   const [emails, setEmails] = useState('')
   const [reason, setReason] = useState('')
   const [errors, setErrors] = useState([])
+  const history = useHistory()
 
 
   const handleSubmit = (e) => {
       e.preventDefault();
       if (cost && emails && reason) {
         setErrors([]);
-        return dispatch(transactionActions.transactionCreation({ cost, emails, reason }))
+        return dispatch(transactionActions.transactionCreation({ cost, emails, reason })).then(() => {history.push('/')})
           .catch(res => {
             if (res.data && res.data.errors) setErrors(res.data.errors);
           });
@@ -57,7 +58,7 @@ function TransactionForm() {
             required
           />
         </label>
-        <button type="submit">Sign Up</button>
+        <button type="submit">Submit</button>
       </form>
     )
   }

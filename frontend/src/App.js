@@ -6,7 +6,7 @@ import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
 import { ModalProvider }  from "./context/Modal"
 import TransactionForm from './components/TransactionForm'
-
+import HomePage from './components/HomePage/HomePage.js';
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -21,11 +21,10 @@ function App() {
         {isLoaded && (
           <>
             <Switch>
-              <Route path="/signup">
-                <SignupFormPage />
-              </Route>
+              <Route exact path='/' component={HomePage} />
+              <Route path="/signup" component={SignupFormPage} />
+              <Route path='/transaction/create' component={TransactionForm} />
             </Switch>
-            <TransactionForm />
           </>
         )}
       </ModalProvider>
