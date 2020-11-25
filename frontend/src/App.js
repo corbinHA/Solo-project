@@ -7,6 +7,9 @@ import Navigation from "./components/Navigation";
 import { ModalProvider }  from "./context/Modal"
 import TransactionForm from './components/TransactionForm'
 import HomePage from './components/HomePage/HomePage.js';
+import LoginForm from "./components/LoginFormModal/LoginForm";
+
+
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -23,6 +26,7 @@ function App() {
             <Switch>
               <Route exact path='/' component={HomePage} />
               <Route path="/signup" component={SignupFormPage} />
+              {/* <Route path='/login' component={LoginForm}/> */}
               <Route path='/transaction/create' component={TransactionForm} />
             </Switch>
           </>

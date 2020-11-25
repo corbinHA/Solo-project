@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Transaction extends Model {
     /**
@@ -13,29 +11,31 @@ module.exports = (sequelize, DataTypes) => {
       const columnMapping = {
         through: 'UsersTransaction',
         otherKey: 'userId',
-        foreignKey: 'transactionId'
-      }
-      Transaction.belongsToMany(models.User, columnMapping)
+        foreignKey: 'transactionId',
+      };
+      Transaction.belongsToMany(models.User, columnMapping);
+
+      Transaction.hasMany(models.UsersTransaction, {
+        foreignKey: 'transactionId',
+      });
     }
-  };
-  transaction.init({
-    cost: {
-      type: DataTypes.NUMERIC,
-      allowNull: false,
+  }
+  Transaction.init(
+    {
+      cost: {
+        type: DataTypes.NUMERIC,
+        allowNull: false,
+      },
+      reason: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
-    reason: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: { model: 'Users' },
-    },
-  }, {
-    sequelize,
-    modelName: 'transaction',
-  });
+    {
+      sequelize,
+      modelName: 'Transaction',
+    }
+  );
 
   return Transaction;
 };
