@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import * as sessionActions from '../../store/session';
 import styled from 'styled-components';
+import './Navigation.css'
 
 const Button = styled.button`
   display: inline-block;
@@ -29,9 +30,7 @@ const Button = styled.button`
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) => state.session.user);
-  console.log(sessionUser)
   const [showMenu, setShowMenu] = useState(false);
-console.log(user.balance)
   const openMenu = () => {
     if (showMenu) return;
     setShowMenu(true);
@@ -63,7 +62,7 @@ console.log(user.balance)
         <ul className="profile-dropdown">
           <li>{user.username}</li>
           <li>{user.email}</li>
-          <li>`$ ${user.balance}`</li>
+          <li>${user.balance}</li>
           <li>
             <Button onClick={logout}>Log Out</Button>
           </li>
