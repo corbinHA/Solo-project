@@ -19,6 +19,41 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'transactionId',
       });
     }
+
+    static async make(transactionData, creatorUserId) {
+      const { cost, emails, reason } = transactionData;
+      const users = [];
+      const User = Transaction.sequelize.models.User;
+      for (let email of emails) {
+        const user = await User.findOne({
+          where: {
+            email: email.trim(),
+          },
+        });
+        users.push(user);
+      }
+      const newTransaction = await Transaction.create(
+        { cost, reason },
+        { include: [User] }
+      );
+
+      users.map(async (user) => {
+        if (user.id === creatorUserId) {
+          await newTransaction.addUser(user, {
+            through: {
+              amountOwed: -1 * (cost / users.length) * (users.length - 1),
+            },
+          });
+        } else {
+          await newTransaction.addUser(user, {
+            through: {
+              amountOwed: cost / users.length,
+            },
+          });
+        }
+      });
+      return newTransaction;
+    }
   }
   Transaction.init(
     {

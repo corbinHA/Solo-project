@@ -13,34 +13,11 @@ router.post(
   '/create',
   requireAuth,
   asyncHandler( async(req, res) => {
-    const {cost, emails, reason } = req.body
-    const emailArr = emails.split(',');
-    const users = []
-    for (email of emailArr) {
-      const user = await User.findOne({
-        where: {
-          email: email.trim()
-        }
-      })
-      users.push(user)
-    }
-    const transaction = await Transaction.create({cost, reason}, {include: [User]})
-    users.map(async(user) =>  {
-      if (user.id === req.user.id) {
-        await transaction.addUser(user, {
-          through: {
-            amountOwed: -1 * (cost / users.length) * (users.length - 1)
-          }
-        })
-      } else {
-        await transaction.addUser(user, {
-          through: {
-            amountOwed: cost / users.length
-          }
-        })
-      }
-    })
-    res.json(transaction)
+    const userEmail = req.user.email;
+    const creatorId = req.user.id
+    req.body.emails.push(userEmail);
+    const newTransaction = await Transaction.make(req.body, creatorId);
+    res.json(newTransaction);
   }))
 
   module.exports = router

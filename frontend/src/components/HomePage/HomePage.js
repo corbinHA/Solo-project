@@ -1,41 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams} from 'react-router-dom';
-import styled from 'styled-components'
-import output from './output.json'
+import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
+import output from './output.json';
+import TransactionItem from './TransactionItem'
 
 const HomePage = () => {
-  const params = useParams()
-  const [history, setHistory] = useState([]);
+  const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(
-          `/api/userTransaction/`
-        );
+        const res = await fetch(`/api/userTransaction/`);
         const data = await res.json();
+        console.log('fetched tx!');
         console.log(data);
-        setHistory(data);
+        setTransactions(data);
       } catch (e) {
         console.error(e);
       }
     })();
-  }, [params]);
+  }, []);
 
-const Amount = styled.div`
-height: 1000px;
-width: 1000px;
-`
+  const transactionItems = transactions.map((txn, idx) => (
+    <TransactionItem key={idx} txn={txn} />
+  ));
 
+  return (
+    <div>
+      <container>{transactionItems}</container>
+    </div>
+  );
+};
 
-    return (
-      <>
-        <container>
-        {/* <Amount title='amountOwed' data={amountOwed} /> */}
-        </container>
-      </>
-    )
-}
 
 export default HomePage;

@@ -17,7 +17,8 @@ function TransactionForm() {
       e.preventDefault();
       if (cost && emails && reason) {
         setErrors([]);
-        return dispatch(transactionActions.transactionCreation({ cost, emails, reason })).then(() => {history.push('/')})
+        const emailArray = emails.split(',');
+        return dispatch(transactionActions.transactionCreation({ cost, emails: emailArray, reason })).then(() => {history.push('/')})
           .catch(res => {
             if (res.data && res.data.errors) setErrors(res.data.errors);
           });

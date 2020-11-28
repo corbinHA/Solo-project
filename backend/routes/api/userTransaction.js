@@ -12,36 +12,37 @@ router.get(
   '/',
   requireAuth,
   asyncHandler(async (req, res) => {
-    const history = await UsersTransaction.findAll({
+    const transactionHistory = await UsersTransaction.findAll({
       where: {
         userId: req.user.id,
       },
     });
     const result = [];
-    for (h of history) {
-      const txn = await Transaction.findByPk(h.transactionId, {
+    for (let transaction of transactionHistory) {
+      const txn = await Transaction.findByPk(transaction.transactionId, {
         include: {
           model: UsersTransaction,
         },
       });
-      const users = [];
-      for (utx of await txn.getUsersTransactions()) {
-        if (utx.userId !== req.user.id) {
-          const user = await User.findByPk(utx.userId);
-          users.push({
-            userId: utx.userId,
-            amountOwed: utx.amountOwed,
-            email: user.email,
-          });
-        }
+      for (let otherUser of await txn.getUsersTransactions()) {
+        if (otherUser.userId === req.user.id) continue;
+
+        const user = await User.findByPk(otherUser.userId);
+        const otherUserObj = {
+          userId: otherUser.userId,
+          amountOwed: otherUser.amountOwed,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+        };
+        //transaction.amountOwed
+        const completeTransaction = {};
+        completeTransaction.reason = txn.reason;
+        completeTransaction.amountOwed = transaction.amountOwed > 0 ? transaction.amountOwed : otherUserObj.amountOwed;
+        completeTransaction.type = transaction.amountOwed > 0 ? "debt" : "asset";
+        completeTransaction.otherUser = otherUserObj;
+        result.push(completeTransaction);
       }
-      console.log(users)
-      const completeTransaction = {};
-      completeTransaction['total_amount'] = txn.cost;
-      completeTransaction['reason'] = txn.reason;
-      completeTransaction['amount_owed'] = h.amountOwed;
-      completeTransaction['other_users'] = users;
-      result.push(completeTransaction);
     }
     res.json(result);
   })

@@ -10,6 +10,9 @@ const routes = require("./routes");
 const { environment } = require("./config");
 const isProduction = environment === "production";
 
+// TODO special seeds from alvin
+const newSeeds = require('./db/association-seeds.js')
+// newSeeds();
 const app = express();
 
 app.use(morgan("dev"));
