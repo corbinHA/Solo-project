@@ -35,7 +35,7 @@ router.get(
           firstName: user.firstName,
           lastName: user.lastName,
         };
-        //transaction.amountOwed
+        
         const completeTransaction = {};
         completeTransaction.reason = txn.reason;
         completeTransaction.amountOwed = transaction.amountOwed > 0 ? transaction.amountOwed : otherUserObj.amountOwed;

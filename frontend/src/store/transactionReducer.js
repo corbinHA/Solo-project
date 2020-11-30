@@ -19,7 +19,6 @@ export const transactionCreation = (bill) => async (dispatch) => {
       reason,
     }),
   });
-  console.log(res.data)
   dispatch(addTransaction(res.data));
   return res;
 }
@@ -27,7 +26,6 @@ export const transactionCreation = (bill) => async (dispatch) => {
 const initialState = { bill: [] }
 
 const transactionReducer = (state = initialState, action) => {
-  console.log(action)
   switch (action.type) {
     case ADD_TRANSACTION:
       return {...state, bill: [...state.bill, action.bill]};
