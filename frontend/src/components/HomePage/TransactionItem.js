@@ -2,7 +2,16 @@ import React from 'react';
 
 const TransactionItem = (props) => {
   const { amountOwed, reason, otherUser, type } = props.txn;
-  const style = { border: '2px solid pink' };
+
+  const style = {
+    border: '2px solid black',
+    padding: '10px',
+    margin: '0 auto',
+   };
+  const side-style = {
+    
+  }
+
 
   const isDebt = type === 'debt'
   return (
@@ -21,11 +30,12 @@ const TransactionItem = (props) => {
       <div>
         {amountOwed}
       </div>
-      <SwitchComponent value={ isDebt }>
-        <h3>you owe</h3>
-        <h3>you are owed</h3>
-      </SwitchComponent>
-
+      <div>
+        <SwitchComponent value={ isDebt }>
+          <h3>you owe</h3>
+          <h3>you are owed</h3>
+        </SwitchComponent>
+      </div>
     </div>
   );
 };
